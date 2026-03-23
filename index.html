@@ -274,7 +274,7 @@
 
     .back-btn svg { width: 24px; height: 24px; }
 
-    .detail-images {
+    .detail-Images {
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -314,7 +314,7 @@
        SUBSECTION PAGES
     ══════════════════════════════ */
     #subsection-list,
-    #subsection-images {
+    #subsection-Images {
       max-width: 420px;
       margin: 0 auto;
       padding: 0 24px 80px;
@@ -442,17 +442,17 @@
     </div>
   </div>
 
-  <!-- ════════ SUBSECTION IMAGES PAGE ════════ -->
-  <div id="subsection-images" class="page">
+  <!-- ════════ SUBSECTION Images PAGE ════════ -->
+  <div id="subsection-Images" class="page">
     <div class="detail-header">
-      <h2 class="detail-title" id="subsection-images-title">Sub</h2>
+      <h2 class="detail-title" id="subsection-Images-title">Sub</h2>
       <button class="back-btn" onclick="goSubList()" aria-label="Back">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M19 12H5M12 5l-7 7 7 7"/>
         </svg>
       </button>
     </div>
-    <div class="detail-images" id="subsection-image-list">
+    <div class="detail-Images" id="subsection-image-list">
       <!-- populated by JS -->
     </div>
   </div>
@@ -468,28 +468,28 @@
       </button>
     </div>
 
-    <div class="detail-images" id="detail-images">
+    <div class="detail-Images" id="detail-Images">
       <!-- populated by JS -->
     </div>
   </div>
 
   <script>
     const projects = {
-      'autocad-cnc':  { title: 'AutoCAD / CNC',       images: 18 },
-      'peacock':      { title: 'Peacock',              images: 5 },
-      'gamer-table':  { title: 'Gamer Table',          images: 5 },
-      'mirrors':      { title: 'Decor: Mirrors',       images: 8 },
-      'bookshelf':    { title: 'Bookshelf: Mountain',  images: 4 },
+      'autocad-cnc':  { title: 'AutoCAD / CNC',       Images: 18 },
+      'peacock':      { title: 'Peacock',              Images: 5 },
+      'gamer-table':  { title: 'Gamer Table',          Images: 5 },
+      'mirrors':      { title: 'Decor: Mirrors',       Images: 8 },
+      'bookshelf':    { title: 'Bookshelf: Mountain',  Images: 4 },
       'coffee-table': {
         title: 'Coffee Table',
         subsections: [
-          { key: 'ct-ufo',         label: 'UFO',          images: 6 },
-          { key: 'ct-BurgerKing',  label: 'BurgerKing',   images: 6 },
-          { key: 'ct-Bride',       label: 'Bride',        images: 3 },
-          { key: 'ct-eleganto',    label: 'Eleganto',     images: 2 },
-          { key: 'ct-meraklis',    label: 'Meraklis',     images: 3 },
-          { key: 'ct-twins',       label: 'Twins',        images: 3 },
-          { key: 'ct-zigzag',      label: 'ZigZag',       images: 3 },
+          { key: 'ct-ufo',         label: 'UFO',          Images: 6 },
+          { key: 'ct-BurgerKing',  label: 'BurgerKing',   Images: 6 },
+          { key: 'ct-Bride',       label: 'Bride',        Images: 3 },
+          { key: 'ct-eleganto',    label: 'Eleganto',     Images: 2 },
+          { key: 'ct-meraklis',    label: 'Meraklis',     Images: 3 },
+          { key: 'ct-twins',       label: 'Twins',        Images: 3 },
+          { key: 'ct-zigzag',      label: 'ZigZag',       Images: 3 },
         ]
       },
     };
@@ -522,7 +522,7 @@
       } else {
         // Regular project — show image detail page
         document.getElementById('detail-title').textContent = project.title;
-        renderImages('detail-images', key, project.images);
+        renderImages('detail-Images', key, project.Images);
         // Make back button go home
         document.querySelector('#project-detail .back-btn').onclick = goHome;
         showPage('project-detail');
@@ -531,15 +531,15 @@
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
 
-    // ── Open a subsection's images ──
+    // ── Open a subsection's Images ──
     function openSubsection(sub) {
-      document.getElementById('subsection-images-title').textContent = sub.label;
-      renderImages('subsection-image-list', sub.key, sub.images);
-      showPage('subsection-images');
+      document.getElementById('subsection-Images-title').textContent = sub.label;
+      renderImages('subsection-image-list', sub.key, sub.Images);
+      showPage('subsection-Images');
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
 
-    // ── Render images ──
+    // ── Render Images ──
     function renderImages(containerId, key, count) {
       const container = document.getElementById(containerId);
       container.innerHTML = '';
