@@ -511,7 +511,7 @@
           item.onclick = () => openSubsection(sub);
           item.innerHTML = `
           <div class="project-thumb">
-            <img src="images/${sub.key}-cover.jpg" alt="${sub.label}" />
+            <img src="Images/${sub.key}-cover.jpg" alt="${sub.label}" />
           </div>
           <p class="project-label">${sub.label}</p>
 `;
@@ -546,7 +546,7 @@
       for (let i = 0; i < count; i++) {
         const wrap = document.createElement('div');
         wrap.classList.add('detail-img-wrap');
-        wrap.innerHTML = `<img src="images/${key}-${i+1}.jpg" alt="${key} photo ${i+1}" />`;
+        wrap.innerHTML = `<img src="Images/${key}-${i+1}.jpg" alt="${key} photo ${i+1}" />`;
         container.appendChild(wrap);
       }
     }
