@@ -16,6 +16,8 @@
       --accent: #c8a84b;
       --font-display: 'Barlow Condensed', sans-serif;
       --font-body: 'Barlow', sans-serif;
+      --max-w: 1100px;
+      --pad: 24px;
     }
 
     html { scroll-behavior: smooth; }
@@ -36,9 +38,9 @@
        HOME PAGE
     ══════════════════════════════ */
     #home {
-      max-width: 420px;
+      max-width: var(--max-w);
       margin: 0 auto;
-      padding: 0 24px 60px;
+      padding: 0 var(--pad) 80px;
     }
 
     /* HEADER */
@@ -49,8 +51,6 @@
       padding-top: 48px;
       margin-bottom: 48px;
     }
-
-    .header-text {}
 
     .name {
       font-family: var(--font-display);
@@ -91,7 +91,8 @@
       font-size: 0.88rem;
       line-height: 1.75;
       color: #3a3a3a;
-      margin-bottom: 48px;
+      margin-bottom: 64px;
+      max-width: 600px;
     }
 
     .bio p + p { margin-top: 14px; }
@@ -103,24 +104,47 @@
       font-size: 1.6rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      margin-bottom: 28px;
+      margin-bottom: 32px;
       color: var(--black);
     }
 
-    /* PROJECT GRID */
+    /* ── PROJECT LIST (mobile: stacked, desktop: label-left / image-right rows) ── */
     .projects {}
 
     .project-item {
-      margin-bottom: 28px;
+      display: flex;
+      align-items: stretch;
+      border-top: 1px solid var(--grey-light);
       cursor: pointer;
+      min-height: 56px;
     }
 
+    .project-item:last-child { border-bottom: 1px solid var(--grey-light); }
+
+    /* Mobile: label above, image below */
+    .project-item {
+      flex-direction: column;
+      margin-bottom: 0;
+    }
+
+    .project-label {
+      font-family: var(--font-display);
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      padding: 16px 0 12px;
+      transition: color 0.2s;
+    }
+
+    .project-item:hover .project-label { color: var(--black); }
+
     .project-thumb {
-    width: 100%;
-    background: var(--grey-light);
-    overflow: hidden;
-    position: relative;
-    } 
+      width: 100%;
+      background: var(--grey-light);
+      overflow: hidden;
+      position: relative;
+    }
 
     .project-thumb img {
       width: 100%;
@@ -139,23 +163,12 @@
       transition: opacity 0.3s ease;
     }
 
-    .project-item:hover .project-thumb::after { opacity: 0.15; }
-    .project-item:hover .project-thumb img { transform: scale(1.04); filter: grayscale(0%); }
-
-    .project-label {
-      font-family: var(--font-display);
-      font-size: 0.72rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--grey-mid);
-      margin-top: 10px;
-      border-top: 1px solid var(--grey-light);
-      padding-top: 10px;
-    }
+    .project-item:hover .project-thumb::after { opacity: 0.12; }
+    .project-item:hover .project-thumb img { transform: scale(1.03); filter: grayscale(0%); }
 
     /* CONTACT */
     .contact-section {
-      margin-top: 64px;
+      margin-top: 80px;
       text-align: center;
     }
 
@@ -172,6 +185,8 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
+      max-width: 480px;
+      margin: 0 auto;
     }
 
     .contact-form input,
@@ -228,16 +243,17 @@
     }
 
     .socials a:hover { color: var(--accent); }
-
     .socials svg { width: 22px; height: 22px; fill: currentColor; }
 
     /* ══════════════════════════════
-       PROJECT DETAIL PAGE
+       DETAIL / SUBSECTION PAGES
     ══════════════════════════════ */
-    #project-detail {
-      max-width: 420px;
+    #project-detail,
+    #subsection-list,
+    #subsection-images {
+      max-width: var(--max-w);
       margin: 0 auto;
-      padding: 0 24px 80px;
+      padding: 0 var(--pad) 80px;
     }
 
     .detail-header {
@@ -245,10 +261,6 @@
       justify-content: space-between;
       align-items: center;
       padding: 40px 0 32px;
-      position: sticky;
-      top: 0;
-      background: var(--white);
-      z-index: 10;
     }
 
     .detail-title {
@@ -271,9 +283,9 @@
     }
 
     .back-btn:hover { color: var(--accent); transform: translateX(-3px); }
-
     .back-btn svg { width: 24px; height: 24px; }
 
+    /* Detail images: single column mobile, masonry-ish desktop */
     .detail-images {
       display: flex;
       flex-direction: column;
@@ -289,14 +301,13 @@
     .detail-img-wrap img {
       width: 100%;
       height: auto;
-      object-fit: unset;
       display: block;
       transition: transform 0.5s ease;
     }
 
-    .detail-img-wrap:hover img { transform: scale(1.03); }
+    .detail-img-wrap:hover img { transform: scale(1.02); }
 
-    /* Placeholder shimmer for empty slots */
+    /* Placeholder shimmer */
     .img-placeholder {
       width: 100%;
       aspect-ratio: 4/3;
@@ -306,18 +317,118 @@
     }
 
     @keyframes shimmer {
-      0% { background-position: 200% 0; }
+      0%   { background-position: 200% 0; }
       100% { background-position: -200% 0; }
     }
 
     /* ══════════════════════════════
-       SUBSECTION PAGES
+       DESKTOP RESPONSIVE (768px+)
     ══════════════════════════════ */
-    #subsection-list,
-    #subsection-images {
-      max-width: 420px;
-      margin: 0 auto;
-      padding: 0 24px 80px;
+    @media (min-width: 768px) {
+
+      /* ── HOME: uncap width, add generous padding ── */
+      #home {
+        max-width: 1200px;
+        padding: 0 64px 100px;
+      }
+
+      /* ── HEADER: bigger name, larger chain ── */
+      .header {
+        padding-top: 64px;
+        margin-bottom: 72px;
+        align-items: center;
+      }
+
+      .name {
+        font-size: 5rem;
+      }
+
+      .tagline {
+        font-size: 0.85rem;
+        margin-top: 10px;
+      }
+
+      .chain-wrap {
+        width: 180px;
+        height: 320px;
+      }
+
+      /* ── BIO: two-column layout (bio left, empty right for breathing room) ── */
+      .bio {
+        max-width: 560px;
+        font-size: 0.95rem;
+        margin-bottom: 72px;
+      }
+
+      /* ── SECTION TITLE: centered on desktop ── */
+      .section-title {
+        font-size: 2.2rem;
+        text-align: center;
+        margin-bottom: 48px;
+      }
+
+      /* ── PROJECTS: 2-column grid ── */
+      .projects {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 32px 48px;
+      }
+
+      .project-item {
+        margin-bottom: 0;
+      }
+
+      /* ── CONTACT: constrained width, centered ── */
+      .contact-section {
+        max-width: 560px;
+        margin: 100px auto 0;
+      }
+
+      .contact-title {
+        font-size: 2.2rem;
+      }
+
+      /* ── DETAIL PAGES: wider, uncapped ── */
+      #project-detail,
+      #subsection-list,
+      #subsection-images {
+        max-width: 1200px;
+        padding: 0 64px 100px;
+      }
+
+      /* ── DETAIL HEADER: bigger title ── */
+      .detail-title {
+        font-size: 3rem;
+      }
+
+      /* ── DETAIL IMAGES: hero + thumbnails grid ── */
+      .detail-images {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 16px;
+      }
+
+      /* First image spans full width as hero */
+      .detail-images .detail-img-wrap:first-child {
+        grid-column: 1 / -1;
+      }
+
+      /* ── SUBSECTION CARDS: 3-column grid ── */
+      #subsection-cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 32px;
+      }
+
+      #subsection-cards .project-item {
+        margin-bottom: 0;
+      }
+    }
+
+    /* ── Large desktop tweak ── */
+    @media (min-width: 1200px) {
+      .name { font-size: 6.5rem; }
+      .chain-wrap { width: 220px; height: 380px; }
     }
 
     /* ── Page-in animation ── */
@@ -327,6 +438,105 @@
     }
 
     .page.active { animation: fadeUp 0.35s ease both; }
+
+    /* ══════════════════════════════
+       DESKTOP OVERRIDES  ≥ 768px
+    ══════════════════════════════ */
+    @media (min-width: 768px) {
+
+      :root { --pad: 48px; }
+
+      /* Bigger header name */
+      .name { font-size: 4rem; }
+      .tagline { font-size: 0.8rem; }
+
+      .chain-wrap {
+        width: 160px;
+        height: 280px;
+      }
+
+      /* Bio wider */
+      .bio {
+        font-size: 0.95rem;
+        max-width: 700px;
+      }
+
+      .section-title { font-size: 2rem; }
+
+      /* ── Project rows: label left, image right ── */
+      .project-item {
+        flex-direction: row;
+        align-items: stretch;
+        gap: 0;
+        min-height: 80px;
+      }
+
+      .project-label {
+        width: 220px;
+        min-width: 220px;
+        font-size: 0.78rem;
+        padding: 24px 32px 24px 0;
+        display: flex;
+        align-items: center;
+        border-top: none; /* border is on the parent */
+      }
+
+      .project-thumb {
+        flex: 1;
+      }
+
+      /* Detail page: hero first image full width, rest in 3-col grid */
+      .detail-images {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+
+      .detail-img-wrap:first-child {
+        grid-column: 1 / -1; /* full width hero */
+      }
+
+      /* Subsection list on desktop: 2-col grid */
+      #subsection-list .projects {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+      }
+
+      /* Reset the row layout for subsection cards */
+      #subsection-list .project-item {
+        flex-direction: column;
+        border-top: none;
+        border-bottom: none;
+      }
+
+      #subsection-list .project-item:last-child {
+        border-bottom: none;
+      }
+
+      #subsection-list .project-label {
+        width: auto;
+        min-width: unset;
+        padding: 12px 0 0;
+        border-top: 1px solid var(--grey-light);
+      }
+
+      .detail-title { font-size: 2.8rem; }
+    }
+
+    /* ══════════════════════════════
+       WIDE DESKTOP  ≥ 1100px
+    ══════════════════════════════ */
+    @media (min-width: 1100px) {
+      .name { font-size: 5rem; }
+      .chain-wrap { width: 200px; height: 340px; }
+
+      .project-label { width: 280px; min-width: 280px; font-size: 0.85rem; }
+
+      #subsection-list .projects {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
   </style>
 </head>
 <body>
