@@ -148,8 +148,10 @@
 
     .project-thumb img {
       width: 100%;
-      height: auto;
+      height: 100%;
       display: block;
+      object-fit: cover;
+      aspect-ratio: 4 / 5;
       transition: transform 0.5s ease, filter 0.3s ease;
       filter: grayscale(10%);
     }
@@ -411,14 +413,15 @@
         font-size: 3rem;
       }
 
-      /* ── DETAIL IMAGES: hero + thumbnails grid ── */
+      /* ── DETAIL IMAGES: masonry grid ── */
       .detail-images {
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 16px;
+        grid-template-columns: repeat(3, 1fr);
+        grid-auto-rows: 10px;
+        column-gap: 6px;
+        row-gap: 6px;
       }
 
-      /* First image spans full width as hero */
       .detail-images .detail-img-wrap:first-child {
         grid-column: 1 / -1;
       }
@@ -495,16 +498,18 @@
         flex: 1;
       }
 
-      /* Detail page: hero first image full width, rest in 3-col grid */
+      /* Detail page: masonry grid, no empty gaps */
       .detail-images {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 16px;
+        grid-auto-rows: 10px;
+        column-gap: 6px;
+        row-gap: 6px;
       }
 
       .detail-img-wrap:first-child,
       .detail-video-wrap {
-        grid-column: 1 / -1; /* full width hero */
+        grid-column: 1 / -1;
       }
 
       /* Subsection list on desktop: 2-col grid */
@@ -703,7 +708,7 @@
         title: 'Coffee Table',
         subsections: [
           { key: 'ct-ufo',         label: 'UFO',          images: 6, video: 'ct-ufo-video.mp4' },
-          { key: 'ct-BurgerKing',  label: 'BurgerKing',   images: 6 },
+          { key: 'ct-BurgerKing',  label: 'BurgerQueen',   images: 6 },
           { key: 'ct-Bride',       label: 'Bride',        images: 3 },
           { key: 'ct-eleganto',    label: 'Eleganto',     images: 2 },
           { key: 'ct-meraklis',    label: 'Meraklis',     images: 3 },
@@ -746,6 +751,7 @@
         // Make back button go home
         document.querySelector('#project-detail .back-btn').onclick = goHome;
         showPage('project-detail');
+        applyMasonry('detail-images');
       }
 
       window.scrollTo({ top: 0, behavior: 'instant' });
@@ -763,14 +769,18 @@
         const container = document.getElementById('subsection-image-list');
         const videoWrap = document.createElement('div');
         videoWrap.className = 'detail-img-wrap detail-video-wrap';
-        videoWrap.innerHTML = `
-          <video src="Images/${sub.video}" controls playsinline preload="metadata">
-            Your browser does not support the video tag.
-          </video>`;
+        const vid = document.createElement('video');
+        vid.src = `Images/${sub.video}`;
+        vid.controls = true;
+        vid.playsInline = true;
+        vid.preload = 'metadata';
+        vid.addEventListener('loadedmetadata', () => masonrySpan(videoWrap), { once: true });
+        videoWrap.appendChild(vid);
         container.prepend(videoWrap);
       }
 
       showPage('subsection-images');
+      applyMasonry('subsection-image-list');
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
 
@@ -785,10 +795,40 @@
         img.src = `Images/${key}-${i+1}.jpg`;
         img.alt = `${key} photo ${i+1}`;
         img.onerror = function() { this.closest('.detail-img-wrap').remove(); };
+        img.addEventListener('load', () => masonrySpan(wrap), { once: true });
         wrap.appendChild(img);
         container.appendChild(wrap);
       }
     }
+
+    // ── Masonry span calculation ──
+    function masonrySpan(item) {
+      if (window.innerWidth < 768) return;
+      const grid = item.closest('.detail-images');
+      if (!grid) return;
+      const rowH  = parseInt(getComputedStyle(grid).gridAutoRows)  || 10;
+      const rowGap = parseInt(getComputedStyle(grid).rowGap)       || 12;
+      const el = item.querySelector('img, video');
+      if (!el) return;
+      const h = el.offsetHeight;
+      if (!h) return;
+      item.style.gridRowEnd = 'span ' + Math.ceil((h + rowGap) / (rowH + rowGap));
+    }
+
+    function applyMasonry(containerId) {
+      if (window.innerWidth < 768) return;
+      document.querySelectorAll('#' + containerId + ' .detail-img-wrap').forEach(item => {
+        const el = item.querySelector('img, video');
+        if (!el) return;
+        const ready = el.tagName === 'VIDEO' ? el.readyState >= 1 : el.complete;
+        if (ready) { masonrySpan(item); }
+      });
+    }
+
+    window.addEventListener('resize', () => {
+      applyMasonry('detail-images');
+      applyMasonry('subsection-image-list');
+    });
 
     // ── Back navigation ──
     function goHome() {
